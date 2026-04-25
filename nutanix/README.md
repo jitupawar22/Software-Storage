@@ -38,6 +38,67 @@ This document focuses on **architecture, workflows, and datapaths** (not product
 
 ---
 
+## 🖼 Architecture Diagram (Hierarchy + Datapath)
+
+```mermaid
+flowchart TB
+  %% --- Client/compute hierarchy ---
+  subgraph NodeA["Node A"]
+    VM["VM / Guest OS\n(vDisk I/O)"]
+    HV["Hypervisor I/O stack"]
+    CVMA["CVM A\n(DSF data services)"]
+    OPA["OpLog A\n(NVMe/SSD)"]
+    ESA["Extent Store A\n(SSD/HDD tiers)"]
+    VM --> HV --> CVMA
+    CVMA --> OPA
+    CVMA --> ESA
+  end
+
+  subgraph NodeB["Node B"]
+    CVMB["CVM B"]
+    OPB["OpLog B"]
+    ESB["Extent Store B"]
+    CVMB --> OPB
+    CVMB --> ESB
+  end
+
+  subgraph NodeC["Node C"]
+    CVMC["CVM C"]
+    OPC["OpLog C"]
+    ESC["Extent Store C"]
+    CVMC --> OPC
+    CVMC --> ESC
+  end
+
+  META["Distributed Metadata Store\n(mapping + checksums)"]
+  CUR["Curator-style Background Framework\n(rebalance, scrub, repair, EC transforms)"]
+
+  %% --- Write path overlay ---
+  CVMA -- "Write (random/bursty)" --> OPA
+  OPA -- "Sync replicate (RF2/RF3)\ncommit before ACK" --> OPB
+  OPA -- "Sync replicate (RF3)" --> OPC
+  OPA -. "Async destage/coalesce" .-> ESA
+
+  CVMA -- "Write (sequential / sustained)\nbypass OpLog" --> ESA
+
+  %% --- Read path overlay ---
+  CVMA -- "Read (if resident)" --> OPA
+  CVMA -- "Read (else)" --> ESA
+  CVMA -- "Remote read on miss" --> ESB
+  CVMA -- "Remote read on miss" --> ESC
+
+  %% --- Metadata / background services relationships ---
+  CVMA <--> META
+  CVMB <--> META
+  CVMC <--> META
+  CUR --> META
+  CUR --> ESA
+  CUR --> ESB
+  CUR --> ESC
+```
+
+---
+
 ## 3. Core Architecture & Components
 
 ### 3.1 Control Plane vs Data Plane
