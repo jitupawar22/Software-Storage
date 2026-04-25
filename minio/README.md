@@ -40,12 +40,12 @@ MinIO is a high-performance, Kubernetes-native object storage suite. It is open-
 ## 🖼 Architectural Visualization
 To understand how MinIO distributes data and parity across a server pool, refer to this high-level production architecture:
 
-http://googleusercontent.com/image_collection/image_retrieval/17353263741072631260_0
+[MinIO Distributed Architecture](https://docs.min.io/enterprise/aistor-object-store/operations/core-concepts/)
 
 ---
 
 ## 🔗 Technical Deep-Dives
-* [MinIO Erasure Coding Design](https://min.io/product/erasure-code)
-* [High-Performance SIMD Acceleration](https://blog.min.io/tag/acceleration/)
-* [MinIO Scaling & Federation](https://min.io/product/scalability)
-* [Core Concepts & Production Deployment](https://docs.min.io/enterprise/aistor-object-store/operations/core-concepts/)
+* [MinIO Erasure Coding Design](https://docs.min.io/enterprise/aistor-object-store/operations/core-concepts/erasure-coding/): A deep look at how MinIO shards objects into data and parity blocks across drives.
+* [Scaling via Server Pools](https://docs.min.io/enterprise/aistor-object-store/operations/scaling/): Explains how MinIO scales horizontally by adding new server pools to an existing cluster.
+* [High-Performance SIMD Acceleration](https://blog.min.io/tag/acceleration/): A technical blog series on how they optimize I/O using CPU instructions.
+* [Core Concepts & Production Deployment](https://docs.min.io/enterprise/aistor-object-store/operations/core-concepts/): A real-world hardware design guide for high-performance AI inference storage.
