@@ -54,7 +54,7 @@ To maintain consistency, each product folder aims to include details on:
 Contributions from storage experts and enthusiasts are welcome! 
 1.  Fork the repository.
 2.  Create a new folder for the product (if it doesn't exist).
-3.  Add a `README.md` using the standard architectural template.
+3.  Add a `README.md` using the standard architectural template. Use the ARCHITECTURE_TEMPLATE.md to fill out the technical details.
 4.  Submit a Pull Request for review.
 
 ---
